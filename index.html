@@ -16,7 +16,7 @@
     </div>
 
     <script>
-        const ws = new WebSocket("wss://fodient-test.servehttp.com");
+        const ws = new WebSocket("wss://fodient-test.servehttp.com:8080");
 
         ws.addEventListener("message", function(event) {
             const data = JSON.parse(event.data);
