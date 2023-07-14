@@ -1,28 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cliker game: made by fodient</title>
-    <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
-
-    <link rel="shortcut icon" href="/ico/icoweb.ico" type="image/x-icon">
-
-    <link rel="stylesheet" href="css/style.css">
+    <title>WebSocket Chat</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
-  <h1 class="credit" >made by: fodient</h1>
-  <div class="box">
-    <button class="btn"  onclick="add()">clike me</button>
+    <div class="h-screen w-screen flex flex-col justify-between">
+        <div id="chat" class="p-3 overflow-auto">
+        </div>
+        <div class="flex">
+            <input id="message" type="text" class="px-3 w-full border-t border-gray-300 outline-none text-gray-700" placeholder="Type your message..." />
+            <button class="px-8 py-3 bg-green-500 text-white hover:bg-green-600 transition-colors" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
 
-    <h1 class="credit" >not giving updates</h1>
+    <script>
+        const ws = new WebSocket("ws://192.168.0.38:8080");
 
-    <p id="text" >game_beta: </p>
-     
-  </div>
+        ws.addEventListener("message", function(event) {
+            const data = JSON.parse(event.data);
 
+            if (data.type === "message") {
+                addMessage(data.data);
+            }
+        });
+
+        function sendMessage() {
+            const message = document.getElementById("message").value;
+
+            if (!message) return false;
+
+            ws.send(JSON.stringify({ type: "message", data: message }));
+
+            addMessage(message);
+            document.getElementById("message").value = "";
+        }
+
+        function addMessage(message) {
+            const node = document.createElement("P");
+            const text = document.createTextNode(message);
+
+            node.appendChild(text);
+            node.classList.add("text-gray-700", "py-1");
+
+            document.getElementById("chat").appendChild(node);
+        }
+    </script>
 </body>
-    <script src="js/main.js"></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8849296367617879"
-     crossorigin="anonymous"></script>
 </html>
