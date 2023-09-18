@@ -16,7 +16,7 @@
     </div>
 
     <script>
-        const ws = new WebSocket("ws://213.103.137.21:3000");
+        const ws = new WebSocket("ws://chatserver.ddns.net");
 
         ws.addEventListener("message", function(event) {
             const data = JSON.parse(event.data);
